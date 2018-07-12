@@ -35,6 +35,8 @@ CompoundModule.calculateFromPage = function() {
   let periodicType =
     ByEnum[document.getElementById(CompoundModule.periodicType).value];
 
+  periodicContribution = periodicContribution * periodicType.divisor;
+
   let plotPoints = Functions.calculatePointsOnlyYearlyCompounding(
     yearsToInvest,
     initialInvestment,
