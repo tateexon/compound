@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>craztad.com</title>
+    <meta name="description" content="FI Coding and Life">
+    <meta name="author" content="Tate Exon">
+
+    <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+
+</head>
+
+<body>
+    <script src="app/main.js"></script>
+    <script>
+        loadImports([
+            "app/compound/compound.js",
+            "app/compound/functions.js",
+            "app/template.js",
+        ]);
+    </script>
+    <h1>Just a little compound interest helper</h1>
+    <div id="app"></div>
+    <script>
+        injectModule("app/compound/compound.html", "app")
+    </script>
+</body>
+
+</html>

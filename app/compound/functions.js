@@ -1,44 +1,46 @@
+let Functions = {};
+
 /**
  * By functions to calculate percentages for sub year increments
- * @param {int} annualPercentage 
+ * @param {int} annualPercentage
  */
-function byDay(annualPercentage) {
+Functions.byDay = function(annualPercentage) {
   return annualPercentage / 365 / 100;
-}
+};
 
-function byWeek(annualPercentage) {
+Functions.byWeek = function(annualPercentage) {
   return annualPercentage / 52 / 100;
-}
+};
 
-function byMonth(annualPercentage) {
+Functions.byMonth = function(annualPercentage) {
   return annualPercentage / 12 / 100;
-}
+};
 
-function byYear(annualPercentage) {
+Functions.byYear = function(annualPercentage) {
   return annualPercentage / 100;
-}
+};
 
 /**
  * An enumeration to help determine what to use in calculations
  */
 const ByEnum = {
   DAY: {
-    func: byDay,
+    func: Functions.byDay,
     divisor: 365,
     key: "day"
   },
   WEEK: {
-    func: byWeek,
+    func: Functions.byWeek,
     divisor: 52,
     key: "week"
   },
   MONTH: {
-    func: byMonth,
+    func: Functions.byMonth,
     divisor: 12,
     key: "month"
   },
   YEAR: {
-    func: byYear,
+    func: Functions.byYear,
     divisor: 1,
     key: "year"
   }
@@ -46,13 +48,13 @@ const ByEnum = {
 
 /**
  * Calculate plot points for investments
- * @param {int} yearsToCalculate 
- * @param {float} initialInvestment 
+ * @param {int} yearsToCalculate
+ * @param {float} initialInvestment
  * @param {float} annualPercentage
  * @param {ByEnum} byEnum
- * @param {float} additionalInvestmentPerPoint 
+ * @param {float} additionalInvestmentPerPoint
  */
-function calculatePoints(
+Functions.calculatePoints = function(
   yearsToCalculate,
   initialInvestment,
   annualPercentage,
@@ -60,7 +62,6 @@ function calculatePoints(
   additionalInvestmentPerPoint
 ) {
   let valuePoints = [];
-  //valuePoints.push(initialInvestment);
   let futureValue = initialInvestment;
   let iterations = yearsToCalculate * byEnum.divisor;
   let rate = byEnum.func(annualPercentage);
@@ -71,9 +72,9 @@ function calculatePoints(
   }
 
   return valuePoints;
-}
+};
 
-function calculatePointsOnlyYearlyCompounding(
+Functions.calculatePointsOnlyYearlyCompounding = function(
   yearsToCalculate,
   initialInvestment,
   annualPercentage,
@@ -81,7 +82,7 @@ function calculatePointsOnlyYearlyCompounding(
   additionalInvestmentPerPoint
 ) {
   // calcualte the points by year initially
-  let yearlyPoints = calculatePoints(
+  let yearlyPoints = Functions.calculatePoints(
     yearsToCalculate,
     initialInvestment,
     annualPercentage,
@@ -103,66 +104,39 @@ function calculatePointsOnlyYearlyCompounding(
     let difference = end - start;
     let perIteration = difference / byEnum.divisor;
 
-    //intermediatePoints.push(start);
-
     for (let j = 1; j <= byEnum.divisor; j++) {
       intermediatePoints.push(start + perIteration * j);
     }
   }
 
   return intermediatePoints;
-}
+};
 
 /**
  * Print a single point value to the screen
- * @param {ByEnum} byEnum 
- * @param {int} point 
- * @param {float} amount 
+ * @param {ByEnum} byEnum
+ * @param {int} point
+ * @param {float} amount
  */
-function printPoint(byEnum, point, amount) {
-  console.log(
+Functions.printPoint = function(byEnum, point, amount) {
+  return (
     "Total after " +
-      point +
-      " " +
-      byEnum.key +
-      (point === 1 ? "" : "s") +
-      ": $" +
-      amount
+    point +
+    " " +
+    byEnum.key +
+    (point === 1 ? "" : "s") +
+    ": $" +
+    amount
   );
-}
+};
 
 /**
  * Print all the point in the array to the screen
- * @param {ByEnum} byEnum 
- * @param {Array} points 
+ * @param {ByEnum} byEnum
+ * @param {Array} points
  */
-function printPoints(byEnum, points) {
+Functions.printPoints = function(byEnum, points) {
   for (let i = 0; i < points.length; i++) {
-    printPoint(byEnum, i + 1, points[i]);
+    console.log(functions.printPoint(byEnum, i + 1, points[i]));
   }
-}
-
-// Usage Example
-let investment = 1000;
-let annualRate = 7;
-let years = 10;
-let yearlyContributions = 0;
-let by = ByEnum.MONTH;
-
-let myPoints = calculatePointsOnlyYearlyCompounding(
-  years,
-  investment,
-  annualRate,
-  by,
-  yearlyContributions
-);
-printPoints(by, myPoints);
-
-myPoints = calculatePoints(
-  years,
-  investment,
-  annualRate,
-  ByEnum.YEAR,
-  yearlyContributions
-);
-printPoints(ByEnum.YEAR, myPoints);
+};
