@@ -10,6 +10,10 @@
     <meta name="author" content="Tate Exon">
 
     <!-- <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/taucharts@2/dist/taucharts.min.css">
+    <link rel="stylesheet" type="text/css" href="app/compound/compound.css">
+    <script src="//cdn.jsdelivr.net/d3js/latest/d3.min.js" charset="utf-8"></script>
+    <script src="//cdn.jsdelivr.net/npm/taucharts@2/dist/taucharts.min.js" type="text/javascript"></script>
 
 </head>
 
@@ -27,6 +31,30 @@
     <script>
         injectModule("app/compound/compound.html", "app")
     </script>
+    <div id="target"></div>
+    <!-- <script>var chart = new TauCharts.Chart({
+            type: "stacked-area",
+            x: "date",
+            y: "effort",
+            color: "team",
+            data: [
+                { team: "Alpha", date: "2015-07-15", effort: 400 },
+                { team: "Alpha", date: "2015-07-16", effort: 200 },
+                { team: "Alpha", date: "2015-07-17", effort: 300 },
+                { team: "Alpha", date: "2015-07-18", effort: 500 },
+                { team: "Beta", date: "2015-07-15", effort: 100 },
+                { team: "Beta", date: "2015-07-16", effort: 200 },
+                { team: "Beta", date: "2015-07-17", effort: 300 },
+                { team: "Beta", date: "2015-07-18", effort: 100 },
+                { team: "Gamma", date: "2015-07-15", effort: 300 },
+                { team: "Gamma", date: "2015-07-16", effort: 100 },
+                { team: "Gamma", date: "2015-07-17", effort: 100 },
+                { team: "Gamma", date: "2015-07-18", effort: 200 }
+            ]
+        });
+        chart.renderTo("#target"); 
+    </script>-->
+
 </body>
 
 </html>
