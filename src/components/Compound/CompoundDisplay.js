@@ -15,7 +15,7 @@ const compoundDisplay = props => (
         {props.calculatedPoints.map(point => (
           <tr key={point.year}>
             <td>{point.year}</td>
-            <td>${point.amount}</td>
+            <td>${point.amount.toFixed(2)}</td>
           </tr>
         ))}
       </tbody>
