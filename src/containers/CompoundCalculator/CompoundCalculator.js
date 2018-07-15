@@ -4,6 +4,8 @@ import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import CompoundControls from "../../components/Compound/CompoundControls";
 import CompoundDisplay from "../../components/Compound/CompoundDisplay";
 
+import { Line } from "react-chartjs-2";
+
 const APP_STORAGE = "compoundCalculatorState";
 
 const PERIOD_ENUMERATION = {
@@ -37,6 +39,14 @@ const PERIOD_ENUMERATION = {
   }
 };
 
+const CHART_OPTIONS = {
+  xAxisID: "Years",
+  yAxisID: "$",
+  maintainAspectRatio: true
+};
+
+const CHART_LABELS = ["Total", "Invested", "Interest", "Safe Withdrawal"];
+
 class CompoundCalculator extends Component {
   // constructor(props) {
   //     super(props);
@@ -51,6 +61,7 @@ class CompoundCalculator extends Component {
   setCookieForApp = state => {
     let cleanState = { ...state };
     cleanState.points = [];
+    cleanState.dataSets = [];
     localStorage.setItem(APP_STORAGE, JSON.stringify(cleanState));
   };
 
@@ -60,7 +71,8 @@ class CompoundCalculator extends Component {
     annualReturn: 6,
     additionalType: "MONTH",
     additionalAmount: 0,
-    points: []
+    points: [],
+    dataSets: {}
   });
 
   updateGraphHandler(tmpState) {
@@ -74,6 +86,7 @@ class CompoundCalculator extends Component {
         PERIOD_ENUMERATION[tmpState.additionalType].divisor
     );
     calculatedState.points = calculatedPoints;
+    calculatedState.dataSets = this.updateDataSets(calculatedPoints);
     this.setState({ ...calculatedState });
     this.setCookieForApp(calculatedState);
   }
@@ -176,6 +189,45 @@ class CompoundCalculator extends Component {
     return intermediatePoints;
   };
 
+  updateDataSets = points => {
+    let totalAmount = [];
+    let totalColor = "rgba(0, 0, 0, 1)";
+    let investedTotal = [];
+    let investedColor = "rgba(63, 191, 63, 1)";
+    let interestTotal = [];
+    let iterestColor = "rgba(63, 191, 191, 1)";
+    let safeWithdrawal = [];
+    let safeWithdrawalColor = "rgba(191, 191, 63, 1)";
+    let labels = [];
+
+    for (let i = 0; i < points.length; i++) {
+      totalAmount.push({ y: points[i].amount.toFixed(2), x: i + 1 });
+      investedTotal.push({ y: points[i].invested, x: i + 1 });
+      interestTotal.push({ y: points[i].interest, x: i + 1 });
+      safeWithdrawal.push({ y: points[i].safeWithdrawal, x: i + 1 });
+      labels.push(i + 1 + "");
+    }
+
+    return {
+      labels: labels,
+      datasets: [
+        this.toDataSet("Total", totalColor, totalAmount),
+        this.toDataSet("Invested", investedColor, investedTotal),
+        this.toDataSet("Interest", iterestColor, interestTotal),
+        this.toDataSet("Safe Withdrawal", safeWithdrawalColor, safeWithdrawal)
+      ]
+    };
+  };
+
+  toDataSet = (label, color, data) => {
+    return {
+      label: label,
+      borderColor: color,
+      data: data,
+      fill: false
+    };
+  };
+
   componentWillMount() {
     if (this.state.points.length === 0) {
       this.updateGraphHandler(this.state);
@@ -198,6 +250,13 @@ class CompoundCalculator extends Component {
           additionalAmountHandler={this.updateAdditionalAmountHandler}
         />
         <CompoundDisplay calculatedPoints={this.state.points} />
+        <Line
+          // labels={CHART_LABELS}
+          data={this.state.dataSets}
+          options={CHART_OPTIONS}
+          width={500}
+          height={100}
+        />
       </Auxiliary>
     );
   }
