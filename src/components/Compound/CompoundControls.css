@@ -1,6 +1,6 @@
 .CompoundControls {
   width: 100%;
-  background-color: #cf8f2e;
+  background-color: #e9e9e9;
   display: flex;
   flex-flow: column;
   align-items: center;
@@ -12,4 +12,12 @@
 .ControlsLeft {
   float: left;
   max-width: 250px;
+}
+
+.TableBorder {
+  border-collapse: collapse;
+}
+
+.TableData {
+  border: 1px solid black;
 }
