@@ -4,6 +4,8 @@ import Auxiliary from "../../hoc/Auxiliary/Auxiliary";
 import CompoundControls from "../../components/Compound/CompoundControls";
 import CompoundDisplay from "../../components/Compound/CompoundDisplay";
 
+const APP_STORAGE = "compoundCalculatorState";
+
 const PERIOD_ENUMERATION = {
   DAY: {
     func: annualPercentage => {
@@ -40,17 +42,28 @@ class CompoundCalculator extends Component {
   //     super(props);
   //     this.state = {...}
   // }
-  state = {
+
+  getStateFromLocalStorageOrDefault = defaultReturn => {
+    const stored = JSON.parse(localStorage.getItem(APP_STORAGE));
+    return stored === null ? defaultReturn : stored;
+  };
+
+  setCookieForApp = state => {
+    let cleanState = { ...state };
+    cleanState.points = [];
+    localStorage.setItem(APP_STORAGE, JSON.stringify(cleanState));
+  };
+
+  state = this.getStateFromLocalStorageOrDefault({
     yearsToInvest: 10,
     amountToInvest: 10,
     annualReturn: 6,
     additionalType: "MONTH",
     additionalAmount: 0,
     points: []
-  };
+  });
 
   updateGraphHandler(tmpState) {
-    console.log("hit update graph handler");
     let calculatedState = { ...tmpState };
     const calculatedPoints = this.calculatePoints(
       Number(tmpState.yearsToInvest),
@@ -62,38 +75,34 @@ class CompoundCalculator extends Component {
     );
     calculatedState.points = calculatedPoints;
     this.setState({ ...calculatedState });
+    this.setCookieForApp(calculatedState);
   }
 
   updateYearsToInvestHandler = event => {
-    console.log("hit update yearsToInvest");
     let tmpState = { ...this.state };
     tmpState.yearsToInvest = event.target.value;
     this.updateGraphHandler(tmpState);
   };
 
   updateAmountToInvestHandler = event => {
-    console.log("hit update amountToInvest: " + event.target.value);
     let tmpState = { ...this.state };
     tmpState.amountToInvest = event.target.value;
     this.updateGraphHandler(tmpState);
   };
 
   updateAnnualReturnHandler = event => {
-    console.log("hit update annualReturn");
     let tmpState = { ...this.state };
     tmpState.annualReturn = event.target.value;
     this.updateGraphHandler(tmpState);
   };
 
   updateAdditionalTypeHandler = event => {
-    console.log("hit update additionalType");
     let tmpState = { ...this.state };
     tmpState.additionalType = event.target.value;
     this.updateGraphHandler(tmpState);
   };
 
   updateAdditionalAmountHandler = event => {
-    console.log("hit update additionalType: " + event.target.value);
     let tmpState = { ...this.state };
     tmpState.additionalAmount = event.target.value;
     this.updateGraphHandler(tmpState);
