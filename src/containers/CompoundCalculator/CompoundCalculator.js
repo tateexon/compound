@@ -68,7 +68,6 @@ class CompoundCalculator extends Component {
     console.log("hit update yearsToInvest");
     let tmpState = { ...this.state };
     tmpState.yearsToInvest = event.target.value;
-    //this.setState({ ...tmpState });
     this.updateGraphHandler(tmpState);
   };
 
@@ -76,7 +75,6 @@ class CompoundCalculator extends Component {
     console.log("hit update amountToInvest: " + event.target.value);
     let tmpState = { ...this.state };
     tmpState.amountToInvest = event.target.value;
-    //this.setState({ ...tmpState });
     this.updateGraphHandler(tmpState);
   };
 
@@ -84,7 +82,6 @@ class CompoundCalculator extends Component {
     console.log("hit update annualReturn");
     let tmpState = { ...this.state };
     tmpState.annualReturn = event.target.value;
-    //this.setState({ ...tmpState });
     this.updateGraphHandler(tmpState);
   };
 
@@ -92,7 +89,6 @@ class CompoundCalculator extends Component {
     console.log("hit update additionalType");
     let tmpState = { ...this.state };
     tmpState.additionalType = event.target.value;
-    //this.setState({ ...tmpState });
     this.updateGraphHandler(tmpState);
   };
 
@@ -100,7 +96,6 @@ class CompoundCalculator extends Component {
     console.log("hit update additionalType: " + event.target.value);
     let tmpState = { ...this.state };
     tmpState.additionalAmount = event.target.value;
-    //this.setState({ ...tmpState });
     this.updateGraphHandler(tmpState);
   };
 
@@ -111,19 +106,24 @@ class CompoundCalculator extends Component {
     byEnum,
     additionalInvestmentPerPoint
   ) => {
-    // console.log("initial investment: " + initialInvestment);
-    // console.log("years: " + yearsToCalculate);
-    // console.log("annual: " + annualPercentage);
-    // console.log("additional: " + additionalInvestmentPerPoint);
     let valuePoints = [];
     let futureValue = initialInvestment;
+    let investedValue = initialInvestment;
+    let interestValue = 0;
     let iterations = yearsToCalculate * byEnum.divisor;
     let rate = byEnum.func(annualPercentage);
 
     for (let i = 0; i < iterations; i++) {
       futureValue = (futureValue + additionalInvestmentPerPoint) * (1 + rate);
-      valuePoints.push({ year: i + 1, amount: futureValue });
-      //console.log("value after " + (i + 1) + ": " + futureValue);
+      investedValue += additionalInvestmentPerPoint;
+      interestValue = futureValue - investedValue;
+      valuePoints.push({
+        year: i + 1,
+        amount: futureValue,
+        invested: investedValue,
+        interest: interestValue,
+        safeWithdrawal: futureValue * 0.04
+      });
     }
 
     return valuePoints;

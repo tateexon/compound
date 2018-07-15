@@ -19,7 +19,7 @@ const compoundControls = props => (
     </div>
     <div>
       <label className={classes.ControlsLeft} htmlFor="annual-return">
-        Annual Return On Investment:{" "}
+        Annual Return:{" "}
       </label>
       <input
         className={classes.ControlsLeft}
