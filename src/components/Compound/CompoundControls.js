@@ -6,7 +6,7 @@ const compoundControls = props => (
   <div className={classes.CompoundControls}>
     <div>
       <label className={classes.ControlsLeft} htmlFor="initial-investment">
-        Amount To Invest: $
+        Currently Invested: $
       </label>
       <input
         className={classes.ControlsLeft}
@@ -32,7 +32,7 @@ const compoundControls = props => (
     </div>
     <div>
       <label className={classes.ControlsLeft} htmlFor="years-to-invest">
-        Years To Invest
+        Years To Invest: 
       </label>
       <input
         className={classes.ControlsLeft}
@@ -45,7 +45,7 @@ const compoundControls = props => (
     </div>
     <div>
       <label className={classes.ControlsLeft} htmlFor="periodic-investment">
-        Periodic Investment $
+        Periodic Investment: $
       </label>
       <input
         className={classes.ControlsLeft}
@@ -66,6 +66,32 @@ const compoundControls = props => (
         <option value="DAY">Daily</option>
       </select>
     </div>
+    <div>
+      <label className={classes.ControlsLeft} htmlFor="yearly-expenses">
+        Yearly Expenses: $
+      </label>
+      <input
+        className={classes.ControlsLeft}
+        id="yearly-expenses"
+        name="yearly-expenses"
+        defaultValue={props.yearlyExpenses}
+        type="number"
+        onChange={props.yearlyExpensesHandler}
+      />
+    </div>
+    {/* <div>
+      <label className={classes.ControlsLeft} htmlFor="yearly-expenses">
+        Yearly Expenses
+      </label>
+      <input
+        className={classes.ControlsLeft}
+        id="yearly-expenses"
+        name="yearly-expenses"
+        defaultValue={props.yearlyExpenses}
+        type="number"
+        onChange={props.yearlyExpensesHandler}
+      />
+    </div> */}
   </div>
 );
 

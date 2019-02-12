@@ -71,6 +71,7 @@ class CompoundCalculator extends Component {
     annualReturn: 6,
     additionalType: "MONTH",
     additionalAmount: 0,
+    yearlyExpenses: 20000,
     points: [],
     dataSets: {}
   });
@@ -83,7 +84,8 @@ class CompoundCalculator extends Component {
       Number(tmpState.annualReturn),
       PERIOD_ENUMERATION.YEAR,
       Number(tmpState.additionalAmount) *
-        PERIOD_ENUMERATION[tmpState.additionalType].divisor
+        PERIOD_ENUMERATION[tmpState.additionalType].divisor,
+      Number(tmpState.yearlyExpenses)
     );
     calculatedState.points = calculatedPoints;
     calculatedState.dataSets = this.updateDataSets(calculatedPoints);
@@ -121,12 +123,19 @@ class CompoundCalculator extends Component {
     this.updateGraphHandler(tmpState);
   };
 
+  updateYearlyExpensesHandler = event => {
+    let tmpState = { ...this.state };
+    tmpState.yearlyExpenses = event.target.value;
+    this.updateGraphHandler(tmpState);
+  };
+
   calculatePoints = (
     yearsToCalculate,
     initialInvestment,
     annualPercentage,
     byEnum,
-    additionalInvestmentPerPoint
+    additionalInvestmentPerPoint,
+    yearlyExpneses
   ) => {
     let valuePoints = [];
     let futureValue = initialInvestment;
@@ -134,17 +143,23 @@ class CompoundCalculator extends Component {
     let interestValue = 0;
     let iterations = yearsToCalculate * byEnum.divisor;
     let rate = byEnum.func(annualPercentage);
+    let yearlyExpensesGrowth = .03;
+    let yearlyFuture = yearlyExpneses;
 
     for (let i = 0; i < iterations; i++) {
       futureValue = (futureValue + additionalInvestmentPerPoint) * (1 + rate);
       investedValue += additionalInvestmentPerPoint;
       interestValue = futureValue - investedValue;
+      
+      yearlyFuture = (yearlyFuture * yearlyExpensesGrowth) + yearlyFuture;
+
       valuePoints.push({
         year: i + 1,
         amount: futureValue,
         invested: investedValue,
         interest: interestValue,
-        safeWithdrawal: futureValue * 0.04
+        safeWithdrawal: futureValue * 0.04,
+        yearlyExpenses: yearlyFuture
       });
     }
 
@@ -156,7 +171,8 @@ class CompoundCalculator extends Component {
     initialInvestment,
     annualPercentage,
     byEnum,
-    additionalInvestmentPerPoint
+    additionalInvestmentPerPoint,
+    yearlyExpenses
   ) => {
     // calcualte the points by year initially
     let yearlyPoints = this.calculatePoints(
@@ -164,7 +180,8 @@ class CompoundCalculator extends Component {
       initialInvestment,
       annualPercentage,
       PERIOD_ENUMERATION.YEAR,
-      additionalInvestmentPerPoint
+      additionalInvestmentPerPoint,
+      yearlyExpenses
     );
 
     // create new point array to hold intermediate points
@@ -198,6 +215,8 @@ class CompoundCalculator extends Component {
     let iterestColor = "rgba(63, 191, 191, 1)";
     let safeWithdrawal = [];
     let safeWithdrawalColor = "rgba(191, 191, 63, 1)";
+    let yearlyExpenses = [];
+    let yearlyExpensesColor = "rgba(191, 191, 191, 1)";
     let labels = [];
 
     for (let i = 0; i < points.length; i++) {
@@ -205,6 +224,7 @@ class CompoundCalculator extends Component {
       investedTotal.push({ y: points[i].invested, x: i + 1 });
       interestTotal.push({ y: points[i].interest, x: i + 1 });
       safeWithdrawal.push({ y: points[i].safeWithdrawal, x: i + 1 });
+      yearlyExpenses.push({ y: points[i].yearlyExpenses, x: i + 1 });
       labels.push(i + 1 + "");
     }
 
@@ -214,7 +234,8 @@ class CompoundCalculator extends Component {
         this.toDataSet("Total", totalColor, totalAmount),
         this.toDataSet("Invested", investedColor, investedTotal),
         this.toDataSet("Interest", iterestColor, interestTotal),
-        this.toDataSet("Safe Withdrawal", safeWithdrawalColor, safeWithdrawal)
+        this.toDataSet("Safe Withdrawal", safeWithdrawalColor, safeWithdrawal),
+        this.toDataSet("Yearly Expenses", yearlyExpensesColor, yearlyExpenses)
       ]
     };
   };
@@ -248,6 +269,8 @@ class CompoundCalculator extends Component {
           additionalTypeHandler={this.updateAdditionalTypeHandler}
           additionalAmount={this.state.additionalAmount}
           additionalAmountHandler={this.updateAdditionalAmountHandler}
+          yearlyExpenses={this.state.yearlyExpenses}
+          yearlyExpensesHandler={this.updateYearlyExpensesHandler}
         />
         <CompoundDisplay calculatedPoints={this.state.points} />
         <Line

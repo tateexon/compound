@@ -12,6 +12,7 @@ const compoundDisplay = props => (
           <th className={classes.TableData}>Invested Total</th>
           <th className={classes.TableData}>Interest Total</th>
           <th className={classes.TableData}>4% Withdrawal</th>
+          <th className={classes.TableData}>Yearly Expenses</th>
         </tr>
       </thead>
       <tbody>
@@ -23,6 +24,9 @@ const compoundDisplay = props => (
             <td className={classes.TableData}>${point.interest.toFixed(2)}</td>
             <td className={classes.TableData}>
               ${point.safeWithdrawal.toFixed(2)}
+            </td>
+            <td className={classes.TableData}>
+              ${point.yearlyExpenses.toFixed(2)}
             </td>
           </tr>
         ))}
